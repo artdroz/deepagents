@@ -9,6 +9,7 @@ from pathlib import Path
 
 import dotenv
 from langchain_core.language_models import BaseChatModel
+from langchain_openai import AzureChatOpenAI
 from rich.console import Console
 
 dotenv.load_dotenv()
@@ -305,6 +306,14 @@ def create_model() -> BaseChatModel:
     Raises:
         SystemExit if no API key is configured
     """
+    return AzureChatOpenAI(
+            model_name="gpt-5",
+            api_key=os.environ["AZURE_OPENAI_API_KEY_GPT4O"],
+            azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT_GPT4O"],
+            deployment_name="gpt-5",
+            api_version="2025-03-01-preview",
+            reasoning_effort="low"
+        )
     if settings.has_openai:
         from langchain_openai import ChatOpenAI
 

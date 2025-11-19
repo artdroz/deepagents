@@ -33,6 +33,15 @@ from deepagents_cli.ui import (
     render_todo_list,
 )
 
+from langfuse import get_client
+from langfuse.langchain import CallbackHandler
+
+# Initialize Langfuse client
+langfuse = get_client()
+
+# Initialize Langfuse CallbackHandler for Langchain (tracing)
+langfuse_handler = CallbackHandler()
+
 _HITL_REQUEST_ADAPTER = TypeAdapter(HITLRequest)
 
 
@@ -190,6 +199,7 @@ async def execute_task(
     config = {
         "configurable": {"thread_id": session_state.thread_id},
         "metadata": {"assistant_id": assistant_id} if assistant_id else {},
+        "callbacks": [langfuse_handler]
     }
 
     has_responded = False
